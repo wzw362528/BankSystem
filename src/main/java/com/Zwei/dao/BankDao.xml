@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Zwei.dao.BankDao">
+    <!--select标签中的id属性是唯一标识符，mybatis会根据id值找到需要执行的sql语句，一般写对应的dao层的方法名
+        resultType的属性值表示的是结果类型，执行完sql语句得到ResultSet集合，遍历ResultSet集合遍历之后得到的java对象的类型
+        值写的是全限定名称
+    -->
+    <!--查询用户-->
+    <select id="findUser" resultType="com.Zwei.domain.UserBean" parameterType="com.Zwei.domain.UserBean">
+        select * from t_user where  username = #{username}
+  </select>
+    <!--查询管理员-->
+    <select id="findAdmin" resultType="com.Zwei.domain.AdminBean">
+        select * from t_admin where  admin_name = #{admin_name}
+  </select>
+    <!--查询明细 resultType类型是list时，要写list中的数据类型，而不是list-->
+    <select id="Detail" resultType="com.Zwei.domain.LogBean">
+        select operated,balance,times from t_log where userId= #{userId}
+  </select>
+
+    <!--插入用户信息-->
+    <insert id="insertUser">
+      insert into t_user(username,password,balance)values(#{username},#{password},#{balance})
+  </insert>
+    <!--插入记录-->
+    <insert id="insertLog" parameterType="com.Zwei.domain.LogBean">
+        insert into t_log(operated,userId,balance)values(#{operated},#{userId},#{balance})
+  </insert>
+
+    <!--更新用户数据-->
+    <update id="updateMoney">
+        update t_user set balance=#{balance} where username=#{username}
+    </update>
+
+    <!--更新用户冻结-->
+    <update id="freezeUser">
+        update t_user set user_flag=0 where username=#{username}
+    </update>
+
+    <!--更新用户解冻-->
+    <update id="UnfreezeUser">
+        update t_user set user_flag=1 where username=#{username}
+    </update>
+</mapper>
